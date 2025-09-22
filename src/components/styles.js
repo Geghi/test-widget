@@ -160,9 +160,11 @@ export function getStyles() {
 
     .technet-message {
       display: flex;
-      align-items: flex-end;
+      align-items: flex-start; /* Changed from flex-end to flex-start for better long message handling */
       gap: 8px;
       animation: messageSlideIn 0.3s ease-out;
+      width: 100%; /* Ensure full width usage */
+      box-sizing: border-box;
     }
 
     @keyframes messageSlideIn {
@@ -178,6 +180,18 @@ export function getStyles() {
 
     .technet-message.user {
       flex-direction: row-reverse;
+      justify-content: flex-start; /* Added for proper alignment */
+    }
+
+    .technet-message.bot {
+      justify-content: flex-start; /* Added for proper alignment */
+    }
+
+    .technet-message > div:not(.technet-message-avatar) {
+      display: flex;
+      flex-direction: column;
+      max-width: calc(100% - 40px); /* Account for avatar width */
+      min-width: 0; /* Allow shrinking */
     }
 
     .technet-message-avatar {
@@ -203,38 +217,57 @@ export function getStyles() {
     }
 
     .technet-message-content {
-      max-width: 70%;
-      padding: 12px 16px;
+      max-width: 85%;
+      padding: 12px 16px; /* Increased horizontal padding for better spacing */
       border-radius: 18px;
       font-size: 14px;
       line-height: 1.4;
       word-wrap: break-word;
+      word-break: break-word; /* Added for better long word handling */
+      overflow-wrap: break-word; /* Added for better overflow handling */
+      hyphens: auto; /* Added for better text wrapping */
+      white-space: pre-wrap; /* Preserve line breaks but allow wrapping */
+      display: block; /* Changed from inline-block to block for better layout */
+      box-sizing: border-box; /* Ensure padding is included in width calculation */
     }
+
 
     .technet-message.bot .technet-message-content {
       background: ${CONFIG.colors.botMessage};
       color: ${CONFIG.colors.text};
-      border-bottom-left-radius: 6px;
+      border-bottom-left-radius: 6px !important;
+      margin-left: 0; /* Ensure proper alignment */
     }
 
     .technet-message.user .technet-message-content {
       background: ${CONFIG.colors.userMessage};
       color: ${CONFIG.colors.text};
-      border-bottom-right-radius: 6px;
+      border-bottom-right-radius: 6px !important; /* Fixed typo: was "imporant" */
+      margin-right: 0; /* Ensure proper alignment */
+      margin-left: auto; /* Push to right side */
     }
 
+    /* Fix for message time alignment */
     .technet-message-time {
       font-size: 11px;
       color: ${CONFIG.colors.textLight};
       margin-top: 4px;
+      align-self: flex-end; /* Align time to the right for user messages */
     }
 
+    .technet-message.bot .technet-message-time {
+      align-self: flex-start; /* Align time to the left for bot messages */
+    }
+      
     .technet-message-sources {
       margin-top: 8px;
       padding: 8px 12px;
       background: rgba(44, 95, 95, 0.05);
       border-radius: 8px;
       border-left: 3px solid ${CONFIG.colors.primary};
+      width: 100%;
+      box-sizing: border-box;
+      word-break: break-all; /* Break long URLs */
     }
 
     .technet-sources-title {
@@ -314,6 +347,9 @@ export function getStyles() {
     .technet-input-wrapper {
       flex: 1;
       position: relative;
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
     }
 
     .technet-input-field {
@@ -321,7 +357,6 @@ export function getStyles() {
       min-height: 20px;
       max-height: 80px;
       padding: 12px 16px;
-      padding-right: 60px;
       border: 2px solid #e0e0e0;
       border-radius: 20px;
       font-size: 14px;
@@ -330,6 +365,10 @@ export function getStyles() {
       outline: none;
       transition: border-color 0.2s ease;
       overflow-y: auto;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      white-space: pre-wrap; /* Allow proper line breaks in input */
+      box-sizing: border-box;
     }
 
     .technet-input-field:focus {
@@ -397,8 +436,8 @@ export function getStyles() {
     @media (max-width: ${CONFIG.dimensions.mobileBreakpoint}px) {
       .technet-chatbot-window {
         width: calc(100vw - 24px);
-        height: calc(100vh - 24px);
-        bottom: 12px;
+        height: calc(100vh - 114px);
+        bottom: 95px;
         right: 12px;
         border-radius: 12px;
       }

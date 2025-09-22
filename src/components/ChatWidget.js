@@ -36,7 +36,6 @@ export class ChatWidget extends HTMLElement {
     this.toggleMinimize = this.toggleMinimize.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.handleInput = this.handleInput.bind(this);
     this.handleOutsideClick = this.handleOutsideClick.bind(this);
   }
 
@@ -167,14 +166,14 @@ export class ChatWidget extends HTMLElement {
     this.sendBtn.addEventListener("click", this.sendMessage);
 
     // Close on escape key
-    document.addEventListener("keydown", (e) => {
+    this.shadow.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && this.isOpen) {
         this.closeChat();
       }
     });
 
     // Click outside to close (optional)
-    document.addEventListener("click", this.handleOutsideClick);
+    this.shadow.addEventListener("click", this.handleOutsideClick);
 
     // Handle window resize for mobile responsiveness
     window.addEventListener(
