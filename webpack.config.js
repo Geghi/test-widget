@@ -1,7 +1,7 @@
 module.exports = {
-     entry: './src/technet-chatbot.js',
-     output: {
-       filename: 'technet-chatbot.min.js',
-       path: __dirname + '/dist'
-     }
-   };
+  entry: "./src/index.js",
+  output: {
+    filename: "technet-chatbot.min.js",
+    path: __dirname + "/dist",
+  },
+};
