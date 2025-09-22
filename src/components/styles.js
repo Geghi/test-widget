@@ -157,16 +157,6 @@ export function getStyles() {
       background: #c1c1c1;
       border-radius: 3px;
     }
-
-    .technet-message {
-      display: flex;
-      align-items: flex-start; /* Changed from flex-end to flex-start for better long message handling */
-      gap: 8px;
-      animation: messageSlideIn 0.3s ease-out;
-      width: 100%; /* Ensure full width usage */
-      box-sizing: border-box;
-    }
-
     @keyframes messageSlideIn {
       from {
         opacity: 0;
@@ -177,21 +167,17 @@ export function getStyles() {
         transform: translateY(0);
       }
     }
+      
+    .technet-message {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      animation: messageSlideIn 0.3s ease-out;
+      margin-bottom: 12px;
+    }
 
     .technet-message.user {
       flex-direction: row-reverse;
-      justify-content: flex-start; /* Added for proper alignment */
-    }
-
-    .technet-message.bot {
-      justify-content: flex-start; /* Added for proper alignment */
-    }
-
-    .technet-message > div:not(.technet-message-avatar) {
-      display: flex;
-      flex-direction: column;
-      max-width: calc(100% - 40px); /* Account for avatar width */
-      min-width: 0; /* Allow shrinking */
     }
 
     .technet-message-avatar {
@@ -216,58 +202,59 @@ export function getStyles() {
       color: white;
     }
 
+    /* This is the key fix - proper message content container */
+    .technet-message > div:not(.technet-message-avatar) {
+      display: flex;
+      flex-direction: column;
+      max-width: calc(100% - 48px); /* Account for avatar + gap */
+    }
+
     .technet-message-content {
-      max-width: 85%;
-      padding: 12px 16px; /* Increased horizontal padding for better spacing */
+      padding: 12px 16px;
       border-radius: 18px;
       font-size: 14px;
       line-height: 1.4;
       word-wrap: break-word;
-      word-break: break-word; /* Added for better long word handling */
-      overflow-wrap: break-word; /* Added for better overflow handling */
-      hyphens: auto; /* Added for better text wrapping */
-      white-space: pre-wrap; /* Preserve line breaks but allow wrapping */
-      display: block; /* Changed from inline-block to block for better layout */
-      box-sizing: border-box; /* Ensure padding is included in width calculation */
+      overflow-wrap: break-word;
+      hyphens: auto;
+      max-width: 100%;
+      width: fit-content;
+      min-width: 60px;
     }
-
 
     .technet-message.bot .technet-message-content {
       background: ${CONFIG.colors.botMessage};
       color: ${CONFIG.colors.text};
-      border-bottom-left-radius: 6px !important;
-      margin-left: 0; /* Ensure proper alignment */
+      border-bottom-left-radius: 6px;
     }
 
     .technet-message.user .technet-message-content {
       background: ${CONFIG.colors.userMessage};
       color: ${CONFIG.colors.text};
-      border-bottom-right-radius: 6px !important; /* Fixed typo: was "imporant" */
-      margin-right: 0; /* Ensure proper alignment */
-      margin-left: auto; /* Push to right side */
+      border-bottom-right-radius: 6px;
+      align-self: flex-end; /* This keeps user messages on the right */
     }
 
-    /* Fix for message time alignment */
     .technet-message-time {
       font-size: 11px;
       color: ${CONFIG.colors.textLight};
       margin-top: 4px;
-      align-self: flex-end; /* Align time to the right for user messages */
+    }
+
+    .technet-message.user .technet-message-time {
+      align-self: flex-end;
     }
 
     .technet-message.bot .technet-message-time {
-      align-self: flex-start; /* Align time to the left for bot messages */
+      align-self: flex-start;
     }
-      
+
     .technet-message-sources {
       margin-top: 8px;
       padding: 8px 12px;
       background: rgba(44, 95, 95, 0.05);
       border-radius: 8px;
       border-left: 3px solid ${CONFIG.colors.primary};
-      width: 100%;
-      box-sizing: border-box;
-      word-break: break-all; /* Break long URLs */
     }
 
     .technet-sources-title {
