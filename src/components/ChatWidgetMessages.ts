@@ -284,7 +284,7 @@ function appendSources(messageElement: HTMLElement, sources: any[]) {
         link.href = sanitizedSource;
         link.target = "_blank";
         link.rel = "noopener noreferrer";
-        link.textContent = source.file_name || sanitizedSource;
+        link.textContent = sanitizedSource; // source.file_name || sanitizedSource;
         listItem.appendChild(link);
         sourcesList.appendChild(listItem);
       }
