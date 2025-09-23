@@ -435,17 +435,6 @@ export function getStyles() {
       }
     }
 
-    /* Minimized state */
-    .technet-chatbot-window.minimized {
-      height: 60px;
-      overflow: hidden;
-    }
-
-    .technet-chatbot-window.minimized .technet-chatbot-messages,
-    .technet-chatbot-window.minimized .technet-chatbot-input {
-      display: none;
-    }
-
     /* Accessibility */
     .technet-chatbot-trigger:focus,
     .technet-chatbot-control-btn:focus,

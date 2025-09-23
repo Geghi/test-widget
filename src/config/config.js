@@ -6,8 +6,8 @@
 export const CONFIG = {
   position: "bottom-right",
   colors: {
-    primary: "#2c5f5f", // Matching TechNet's teal color
-    secondary: "#ff6600", // Orange accent from the website
+    primary: "#11404B", // Matching TechNet's teal color
+    secondary: "#FF5C00", // Orange accent from the website
     text: "#333333",
     textLight: "#666666",
     background: "#ffffff",
