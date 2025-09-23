@@ -10,7 +10,11 @@
  * @param {string} [innerHTML] - Optional inner HTML content
  * @returns {HTMLElement} The created element
  */
-export function createElement(tag, className = "", innerHTML = "") {
+export function createElement(
+  tag: string,
+  className: string = "",
+  innerHTML: string = ""
+) {
   const element = document.createElement(tag);
   if (className) element.className = className;
   if (innerHTML) element.innerHTML = innerHTML;
@@ -22,7 +26,7 @@ export function createElement(tag, className = "", innerHTML = "") {
  * @param {Date} date - The date object to format
  * @returns {string} Formatted time string
  */
-export function formatTime(date) {
+export function formatTime(date: Date) {
   return date.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
@@ -34,7 +38,7 @@ export function formatTime(date) {
  * Scrolls the messages container to the bottom
  * @param {HTMLElement} container - The messages container element
  */
-export function scrollToBottom(container) {
+export function scrollToBottom(container: HTMLElement) {
   setTimeout(() => {
     container.scrollTop = container.scrollHeight;
   }, 100);
@@ -45,7 +49,10 @@ export function scrollToBottom(container) {
  * @param {HTMLTextAreaElement} textarea - The textarea to resize
  * @param {number} maxHeight - Maximum height for the textarea
  */
-export function autoResizeTextarea(textarea, maxHeight = 80) {
+export function autoResizeTextarea(
+  textarea: HTMLTextAreaElement,
+  maxHeight = 80
+) {
   textarea.style.height = "auto";
   textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + "px";
 }

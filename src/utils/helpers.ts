@@ -9,9 +9,9 @@
  * @param {number} wait - The number of milliseconds to delay
  * @returns {Function} The debounced function
  */
-export function debounce(func, wait) {
-  let timeout;
-  return function executedFunction(...args) {
+export function debounce(func: Function, wait: number) {
+  let timeout: NodeJS.Timeout;
+  return function executedFunction(...args: any[]) {
     const later = () => {
       clearTimeout(timeout);
       func(...args);

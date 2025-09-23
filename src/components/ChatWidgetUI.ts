@@ -1,20 +1,13 @@
-import { CONFIG } from "../config/config.js";
-import {
-  createElement,
-  formatTime,
-  scrollToBottom,
-  autoResizeTextarea,
-} from "../utils/dom.js";
-import { sanitizeHTML, sanitizeURL } from "../utils/sanitizer.js";
-import { debounce, generateId, isMobile } from "../utils/helpers.js";
-import { mockAPI } from "../api/mockApi.js";
-import { getStyles } from "./styles.js";
+import { CONFIG } from "../config/config";
+import { createElement } from "../utils/dom";
+import ChatWidget from "./ChatWidget";
+import { getStyles } from "./styles";
 
 /**
  * Renders the widget UI within the shadow DOM
  * @param {ChatWidget} widget - The ChatWidget instance
  */
-export function render(widget) {
+export function render(widget: ChatWidget) {
   // Add styles to shadow DOM
   const style = createElement("style");
   style.textContent = getStyles();
@@ -24,15 +17,18 @@ export function render(widget) {
   const container = createElement("div", "technet-chatbot");
 
   // Create trigger button
-  widget.trigger = createElement("button", "technet-chatbot-trigger");
-  widget.trigger.innerHTML = `
+  widget.trigger = createElement(
+    "button",
+    "technet-chatbot-trigger"
+  ) as HTMLButtonElement;
+  widget.trigger!.innerHTML = `
     <svg viewBox="0 0 24 24">
       <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
     </svg>
   `;
-  widget.trigger.setAttribute("aria-label", "Open TechNet Chat Assistant");
-  widget.trigger.setAttribute("role", "button");
-  widget.trigger.setAttribute("tabindex", "0");
+  widget.trigger!.setAttribute("aria-label", "Open TechNet Chat Assistant");
+  widget.trigger!.setAttribute("role", "button");
+  widget.trigger!.setAttribute("tabindex", "0");
 
   // Create chat window
   widget.window = createElement("div", "technet-chatbot-window");
@@ -82,14 +78,20 @@ export function render(widget) {
   widget.window.appendChild(inputArea);
 
   // Add to container
-  container.appendChild(widget.trigger);
+  container.appendChild(widget.trigger!);
   container.appendChild(widget.window);
 
   // Add container to shadow DOM
   widget.shadow.appendChild(container);
 
   // Store references to elements
-  widget.inputField = widget.window.querySelector(".technet-input-field");
-  widget.sendBtn = widget.window.querySelector(".technet-send-btn");
-  widget.closeBtn = widget.window.querySelector(".close-btn");
+  widget.inputField = widget.window.querySelector(
+    ".technet-input-field"
+  ) as HTMLTextAreaElement;
+  widget.sendBtn = widget.window.querySelector(
+    ".technet-send-btn"
+  ) as HTMLButtonElement;
+  widget.closeBtn = widget.window.querySelector(
+    ".close-btn"
+  ) as HTMLButtonElement;
 }

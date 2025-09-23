@@ -8,7 +8,9 @@
  * @param {string} message - The user's message
  * @returns {Promise<Object>} A promise that resolves with a mock response
  */
-export async function mockAPI(message) {
+export async function mockAPI(
+  message: string
+): Promise<{ text: string; sources: string[] }> {
   // Simulate network delay
   await new Promise((resolve) =>
     setTimeout(resolve, 1000 + Math.random() * 2000)
@@ -46,7 +48,3 @@ export async function mockAPI(message) {
 
   return responses[Math.floor(Math.random() * responses.length)];
 }
-
-export default {
-  mockAPI,
-};

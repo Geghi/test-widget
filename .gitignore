@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
 
+dist/
+
+!dist/technet-chatbot.min.js
 # Environment files
 .env*.local
 

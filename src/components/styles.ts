@@ -3,7 +3,7 @@
  * Contains all CSS styles as JavaScript template literals for Shadow DOM encapsulation
  */
 
-import { CONFIG } from "../config/config.js";
+import { CONFIG } from "../config/config";
 
 /**
  * Generates the complete CSS styles for the widget

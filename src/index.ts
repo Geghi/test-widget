@@ -3,7 +3,7 @@
  * Main entry file that initializes the chatbot widget
  */
 
-import { ChatWidget } from "./components/ChatWidget.js";
+import { ChatWidget } from "./components/ChatWidget";
 
 // Define the custom element
 customElements.define("technet-chatbot", ChatWidget);
@@ -12,7 +12,6 @@ customElements.define("technet-chatbot", ChatWidget);
 function init() {
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", () => {
-      // Create and attach the widget to the document
       const widget = document.createElement("technet-chatbot");
       document.body.appendChild(widget);
     });

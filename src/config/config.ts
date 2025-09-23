@@ -3,7 +3,44 @@
  * Contains all customizable settings for the widget appearance and behavior
  */
 
-export const CONFIG = {
+interface MessagesConfig {
+  initial: string;
+  placeholder: string;
+  error: string;
+  thinking: string;
+}
+
+interface AnimationConfig {
+  duration: number;
+  easing: string;
+}
+
+interface ColorsConfig {
+  primary: string;
+  secondary: string;
+  text: string;
+  textLight: string;
+  background: string;
+  userMessage: string;
+  botMessage: string;
+  shadow: string;
+}
+
+interface DimensionsConfig {
+  windowWidth: number;
+  windowHeight: number;
+  mobileBreakpoint: number;
+}
+
+interface ChatWidgetConfig {
+  position: string;
+  colors: ColorsConfig;
+  animation: AnimationConfig;
+  messages: MessagesConfig;
+  dimensions: DimensionsConfig;
+}
+
+export const CONFIG: ChatWidgetConfig = {
   position: "bottom-right",
   colors: {
     primary: "#11404B", // Matching TechNet's teal color

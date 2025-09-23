@@ -15,18 +15,18 @@ A modern, accessible chatbot widget for TechNet with Shadow DOM encapsulation.
 
 ```
 src/
-├── index.js (entry point)
+├── index.ts (entry point)
 ├── components/
-│   ├── ChatWidget.js (main widget class)
-│   └── styles.js (CSS-in-JS styles)
+│   ├── ChatWidget.ts (main widget class)
+│   └── styles.ts (CSS-in-JS styles)
 ├── config/
-│   └── config.js (configuration object)
+│   └── config.ts (configuration object)
 ├── utils/
-│   ├── dom.js (DOM utility functions)
-│   ├── helpers.js (general helper functions)
-│   └── sanitizer.js (HTML sanitization)
+│   ├── dom.ts (DOM utility functions)
+│   ├── helpers.ts (general helper functions)
+│   └── sanitizer.ts (HTML sanitization)
 ├── api/
-│   └── mockApi.js (mock API implementation)
+│   └── mockApi.ts (mock API implementation)
 ```
 
 ## Installation
@@ -71,14 +71,14 @@ Alternatively, you can use any other local web server solution like:
 Include the built JavaScript file in your HTML:
 
 ```html
-<script src="dist/technet-chatbot.min.js"></script>
+<script src="dist/technet-chatbot.min.ts"></script>
 ```
 
 The widget will automatically initialize and attach to the document body.
 
 ## Customization
 
-To customize the widget, modify the configuration in `src/config/config.js` and rebuild the project.
+To customize the widget, modify the configuration in `src/config/config.ts` and rebuild the project.
 
 ## Browser Support
 

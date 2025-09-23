@@ -3,18 +3,30 @@
  * Main class implementing the chatbot widget with Shadow DOM encapsulation
  */
 
-import { CONFIG } from "../config/config.js";
-import { render } from "./ChatWidgetUI.js";
-import { bindEvents } from "./ChatWidgetEvents.js";
+import { CONFIG } from "../config/config";
+import { render } from "./ChatWidgetUI";
+import { bindEvents } from "./ChatWidgetEvents";
 import {
   addMessage,
-  showTypingIndicator,
   hideTypingIndicator,
   showNotification,
-} from "./ChatWidgetMessages.js";
-import { mockAPI } from "../api/mockApi.js";
+  streamBotMessage,
+} from "./ChatWidgetMessages";
+import { Message } from "../types/types";
 
 export class ChatWidget extends HTMLElement {
+  shadow: ShadowRoot;
+  isOpen: boolean;
+  messageHistory: Message[];
+  isTyping: boolean;
+  typingIndicator: HTMLElement | null;
+  messagesContainer?: HTMLElement;
+  sendBtn?: HTMLButtonElement;
+  window?: HTMLElement;
+  trigger?: HTMLButtonElement;
+  inputField?: HTMLTextAreaElement;
+  closeBtn?: HTMLButtonElement;
+
   constructor() {
     super();
 
@@ -50,7 +62,7 @@ export class ChatWidget extends HTMLElement {
    * Handles keydown events for accessibility
    * @param {KeyboardEvent} e - The keyboard event
    */
-  handleKeyDown(e) {
+  handleKeyDown(e: KeyboardEvent) {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       this.toggleChat();
@@ -73,13 +85,13 @@ export class ChatWidget extends HTMLElement {
    */
   openChat() {
     this.isOpen = true;
-    this.window.style.display = "flex";
-    this.trigger.classList.add("open");
-    this.trigger.setAttribute("aria-expanded", "true");
+    this.window!.style.display = "flex";
+    this.trigger!.classList.add("open");
+    this.trigger!.setAttribute("aria-expanded", "true");
 
     // Focus the input field
     setTimeout(() => {
-      this.inputField.focus();
+      this.inputField!.focus();
     }, 300);
   }
 
@@ -88,30 +100,25 @@ export class ChatWidget extends HTMLElement {
    */
   closeChat() {
     this.isOpen = false;
-    this.window.style.display = "none";
-    this.trigger.classList.remove("open");
-    this.trigger.setAttribute("aria-expanded", "false");
+    this.window!.style.display = "none";
+    this.trigger!.classList.remove("open");
+    this.trigger!.setAttribute("aria-expanded", "false");
   }
 
   /**
    * Sends a message from the user
    */
   async sendMessage() {
-    const message = this.inputField.value.trim();
+    const message = this.inputField!.value.trim();
     if (!message || this.isTyping) return;
 
     // Add user message
     addMessage(this, message, "user");
-    this.inputField.value = "";
-    this.inputField.style.height = "auto";
-
-    // Show typing indicator
-    showTypingIndicator(this);
+    this.inputField!.value = "";
+    this.inputField!.style.height = "auto";
 
     try {
-      const response = await mockAPI(message);
-      hideTypingIndicator(this);
-      addMessage(this, response.text, "bot", response.sources);
+      await streamBotMessage(this, message);
     } catch (error) {
       console.error("Chatbot API Error:", error);
       hideTypingIndicator(this);
