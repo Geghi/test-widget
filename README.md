@@ -43,35 +43,20 @@ npm run build
 
 This will create a production-ready bundle in the `dist/` directory.
 
-## Development
+## Development / Testing
 
 ```bash
-npm run dev
+start .\index.html
 ```
 
-This will start webpack in watch mode for development.
-
-## Testing
-
-To test the widget, you need to serve the files through a web server due to browser security restrictions:
-
-```bash
-npx http-server .
-```
-
-Then open `http://127.0.0.1:8080/test.html` in your browser.
-
-Alternatively, you can use any other local web server solution like:
-
-- Python's built-in server: `python -m http.server 8000`
-- VS Code Live Server extension
+This will open a test html file with the widget included for developement.
 
 ## Usage
 
 Include the built JavaScript file in your HTML:
 
 ```html
-<script src="dist/technet-chatbot.min.ts"></script>
+<script defer src="dist/technet-chatbot.min.ts"></script>
 ```
 
 The widget will automatically initialize and attach to the document body.

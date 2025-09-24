@@ -3,48 +3,13 @@
  * Contains all customizable settings for the widget appearance and behavior
  */
 
-interface MessagesConfig {
-  initial: string;
-  placeholder: string;
-  error: string;
-  thinking: string;
-}
-
-interface AnimationConfig {
-  duration: number;
-  easing: string;
-}
-
-interface ColorsConfig {
-  primary: string;
-  secondary: string;
-  text: string;
-  textLight: string;
-  background: string;
-  userMessage: string;
-  botMessage: string;
-  shadow: string;
-}
-
-interface DimensionsConfig {
-  windowWidth: number;
-  windowHeight: number;
-  mobileBreakpoint: number;
-}
-
-interface ChatWidgetConfig {
-  position: string;
-  colors: ColorsConfig;
-  animation: AnimationConfig;
-  messages: MessagesConfig;
-  dimensions: DimensionsConfig;
-}
+import { ChatWidgetConfig } from "../types/chat-widget-config";
 
 export const CONFIG: ChatWidgetConfig = {
   position: "bottom-right",
   colors: {
-    primary: "#11404B", // Matching TechNet's teal color
-    secondary: "#FF5C00", // Orange accent from the website
+    primary: "#11404B",
+    secondary: "#FF5C00",
     text: "#333333",
     textLight: "#666666",
     background: "#ffffff",
@@ -65,7 +30,7 @@ export const CONFIG: ChatWidgetConfig = {
     thinking: "Thinking...",
   },
   dimensions: {
-    windowWidth: 380,
+    windowWidth: 480,
     windowHeight: 500,
     mobileBreakpoint: 768,
   },
