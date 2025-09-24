@@ -37,8 +37,11 @@ export function isMobile() {
   return window.innerWidth <= 768;
 }
 
-export default {
-  debounce,
-  generateId,
-  isMobile,
-};
+export function extractSources(sourcesJsonString: string): string[] {
+  try {
+    return JSON.parse(sourcesJsonString);
+  } catch (e) {
+    console.error("Failed to parse sources JSON:", e);
+    return [];
+  }
+}

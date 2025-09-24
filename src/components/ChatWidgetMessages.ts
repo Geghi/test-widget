@@ -1,9 +1,10 @@
 import { createElement, formatTime, scrollToBottom } from "../utils/dom";
 import { sanitizeHTML, sanitizeURL } from "../utils/sanitizer";
-import { generateId } from "../utils/helpers";
+import { extractSources, generateId } from "../utils/helpers";
 import { CONFIG } from "../config/config";
 import ChatWidget from "./ChatWidget";
 import { Message } from "../types/types";
+import { createSourceLink, createSourceListItem } from "../utils/elements";
 
 /**
  * Adds a message to the chat
@@ -172,7 +173,7 @@ export async function streamBotMessage(
 
   try {
     const response = await fetch(
-      `http://localhost:8000/chat/stream-summary?message=${encodeURIComponent(
+      `http://localhost:8000/api/stream-summary?message=${encodeURIComponent(
         userMessage
       )}`
     );
@@ -210,16 +211,11 @@ export async function streamBotMessage(
         if (sourcesIndex !== -1) {
           // Extract the text before the sources marker
           accumulatedText += chunk.substring(0, sourcesIndex);
-
-          // Extract and parse the sources JSON
+          // Extract sources JSON
           const sourcesJsonString = chunk.substring(
             sourcesIndex + sourcesMarker.length
           );
-          try {
-            sources = JSON.parse(sourcesJsonString);
-          } catch (e) {
-            console.error("Failed to parse sources JSON:", e);
-          }
+          sources = extractSources(sourcesJsonString);
           done = true; // End of stream after sources
         } else {
           // Regular text chunk
@@ -279,13 +275,7 @@ function appendSources(messageElement: HTMLElement, sources: any[]) {
     sources.forEach((source) => {
       const sanitizedSource = sanitizeURL(source.source);
       if (sanitizedSource) {
-        const listItem = createElement("li");
-        const link = createElement("a") as HTMLAnchorElement;
-        link.href = sanitizedSource;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        link.textContent = sanitizedSource; // source.file_name || sanitizedSource;
-        listItem.appendChild(link);
+        const listItem = createSourceListItem(sanitizedSource);
         sourcesList.appendChild(listItem);
       }
     });

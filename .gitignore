@@ -1,7 +1,7 @@
 # Dependencies
 node_modules/
 
-dist/
+dist/*
 
 !dist/technet-chatbot.min.js
 # Environment files
