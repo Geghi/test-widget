@@ -1,3 +1,5 @@
+import { marked } from "marked";
+
 /**
  * General Helper Functions for TechNet Chatbot Widget
  * Provides utility functions for debouncing and other general purposes
@@ -44,4 +46,25 @@ export function extractSources(sourcesJsonString: string): string[] {
     console.error("Failed to parse sources JSON:", e);
     return [];
   }
+}
+
+/**
+ * Checks if text contains Markdown syntax
+ * @param {string} text - The text to check
+ * @returns {boolean} True if the text contains Markdown syntax
+ */
+export function hasMarkdown(text: string): boolean {
+  // Check for comprehensive Markdown patterns
+  return /\*\*.*\*\*|^\s*#{1,6}\s|\*.*\*|_[^_]*_|\`[^`]*\`|\[.*\]\(.*\)|^\s*[-*+]\s|^\s*\d+\.\s|^\s*>\s|```[\s\S]*?```/.test(
+    text
+  );
+}
+
+/**
+ * Parses Markdown text to HTML
+ * @param {string} text - The Markdown text to parse
+ * @returns {string} The parsed HTML
+ */
+export function parseMarkdown(text: string): string {
+  return marked(text) as string;
 }

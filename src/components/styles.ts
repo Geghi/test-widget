@@ -222,6 +222,87 @@ export function getStyles() {
       min-width: 60px;
     }
 
+    /* Markdown content styling */
+    .technet-message-content p {
+      margin-bottom: 12px;
+    }
+
+    .technet-message-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .technet-message-content h1,
+    .technet-message-content h2,
+    .technet-message-content h3,
+    .technet-message-content h4,
+    .technet-message-content h5,
+    .technet-message-content h6 {
+      font-weight: 600;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .technet-message-content h1 {
+      font-size: 18px;
+    }
+
+    .technet-message-content h2 {
+      font-size: 16px;
+    }
+
+    .technet-message-content h3 {
+      font-size: 15px;
+    }
+
+    .technet-message-content ul,
+    .technet-message-content ol {
+      margin-bottom: 12px;
+      padding-left: 20px;
+    }
+
+    .technet-message-content li {
+      margin-bottom: 4px;
+    }
+
+    .technet-message-content strong,
+    .technet-message-content b {
+      font-weight: 600;
+    }
+
+    .technet-message-content em,
+    .technet-message-content i {
+      font-style: italic;
+    }
+
+    .technet-message-content code {
+      background: rgba(0, 0, 0, 0.1);
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 13px;
+    }
+
+    .technet-message-content pre {
+      background: rgba(0, 0, 0, 0.05);
+      padding: 12px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin-bottom: 12px;
+    }
+
+    .technet-message-content pre code {
+      background: transparent;
+      padding: 0;
+    }
+
+    .technet-message-content blockquote {
+      border-left: 3px solid ${CONFIG.colors.primary};
+      padding-left: 12px;
+      margin: 12px 0;
+      color: ${CONFIG.colors.textLight};
+      font-style: italic;
+    }
+
     .technet-message.bot .technet-message-content {
       background: ${CONFIG.colors.botMessage};
       color: ${CONFIG.colors.text};

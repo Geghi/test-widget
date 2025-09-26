@@ -1,6 +1,7 @@
 import { createElement, formatTime, scrollToBottom } from "../utils/dom";
 import { sanitizeHTML, sanitizeURL } from "../utils/sanitizer";
-import { extractSources, generateId } from "../utils/helpers";
+import { extractSources, generateId, hasMarkdown } from "../utils/helpers";
+import { parseMarkdown } from "../utils/markdown";
 import { CONFIG } from "../config/config";
 import ChatWidget from "./ChatWidget";
 import { Message } from "../types/types";
@@ -23,7 +24,7 @@ export function addMessage(
 ) {
   const message: Message = {
     id: generateId(),
-    text: sanitizeHTML(text),
+    text: sender === "user" ? sanitizeHTML(text) : text,
     sender,
     sources: sources || [],
     timestamp: new Date(),
@@ -57,7 +58,11 @@ export function createMessageElement(message: Message) {
 
   const contentWrapper = createElement("div");
   const content = createElement("div", "technet-message-content");
-  content.textContent = message.text;
+  if (message.sender === "bot" && hasMarkdown(message.text)) {
+    content.innerHTML = parseMarkdown(message.text);
+  } else {
+    content.textContent = message.text;
+  }
 
   const time = createElement("div", "technet-message-time");
   time.textContent = formatTime(message.timestamp);
@@ -173,9 +178,7 @@ export async function streamBotMessage(
 
   try {
     const response = await fetch(
-      `http://localhost:8000/api/stream-summary?message=${encodeURIComponent(
-        userMessage
-      )}`
+      `${CONFIG.apiUrl}?message=${encodeURIComponent(userMessage)}`
     );
 
     if (!response.body) {
@@ -227,7 +230,13 @@ export async function streamBotMessage(
           ".technet-message-content"
         ) as HTMLElement;
         if (messageContentEl) {
-          messageContentEl.textContent = accumulatedText;
+          messageContentEl.innerHTML = parseMarkdown(accumulatedText);
+
+          // if (hasMarkdown(accumulatedText)) {
+          //   messageContentEl.innerHTML = parseMarkdown(accumulatedText);
+          // } else {
+          //   messageContentEl.textContent = accumulatedText;
+          // }
           scrollToBottom(widget.messagesContainer!);
         }
       }

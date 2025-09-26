@@ -33,4 +33,5 @@ export interface ChatWidgetConfig {
   animation: AnimationConfig;
   messages: MessagesConfig;
   dimensions: DimensionsConfig;
+  apiUrl: string;
 }

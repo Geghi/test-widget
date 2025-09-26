@@ -1,3 +1,5 @@
+const Dotenv = require("dotenv-webpack");
+
 module.exports = {
   mode: "production",
   entry: "./src/index.ts",
@@ -18,4 +20,5 @@ module.exports = {
   resolve: {
     extensions: [".ts", ".js"],
   },
+  plugins: [new Dotenv()],
 };
