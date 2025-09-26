@@ -55,7 +55,7 @@ export class ChatWidget extends HTMLElement {
     bindEvents(this);
 
     // Add initial message
-    addMessage(this, CONFIG.messages.initial, "bot", [], true);
+    addMessage(this, CONFIG.messages.initial, "bot", true);
   }
 
   /**
@@ -123,7 +123,10 @@ export class ChatWidget extends HTMLElement {
       console.error("Chatbot API Error:", error);
       hideTypingIndicator(this);
       addMessage(this, CONFIG.messages.error, "bot");
-      showNotification(this, "Connection error. Please try again.");
+      showNotification(
+        this,
+        "An error occurred while generating the response. Please try again."
+      );
     }
   }
 }

@@ -1,11 +1,12 @@
 import { createElement, formatTime, scrollToBottom } from "../utils/dom";
 import { sanitizeHTML, sanitizeURL } from "../utils/sanitizer";
-import { extractSources, generateId, hasMarkdown } from "../utils/helpers";
+import { extractSources, generateId } from "../utils/helpers";
 import { parseMarkdown } from "../utils/markdown";
 import { CONFIG } from "../config/config";
 import ChatWidget from "./ChatWidget";
 import { Message } from "../types/types";
-import { createSourceLink, createSourceListItem } from "../utils/elements";
+import { createSourceListItem } from "../utils/elements";
+import { postStreamMessage } from "../api/chatApi";
 
 /**
  * Adds a message to the chat
@@ -19,14 +20,13 @@ export function addMessage(
   widget: ChatWidget,
   text: string,
   sender: "bot" | "user",
-  sources: string[] = [],
   isInitial = false
 ) {
   const message: Message = {
     id: generateId(),
     text: sender === "user" ? sanitizeHTML(text) : text,
     sender,
-    sources: sources || [],
+    sources: [],
     timestamp: new Date(),
     isInitial,
   };
@@ -58,7 +58,7 @@ export function createMessageElement(message: Message) {
 
   const contentWrapper = createElement("div");
   const content = createElement("div", "technet-message-content");
-  if (message.sender === "bot" && hasMarkdown(message.text)) {
+  if (message.sender === "bot") {
     content.innerHTML = parseMarkdown(message.text);
   } else {
     content.textContent = message.text;
@@ -69,35 +69,6 @@ export function createMessageElement(message: Message) {
 
   contentWrapper.appendChild(content);
   contentWrapper.appendChild(time);
-
-  // Add sources if available
-  if (message.sources && message.sources.length > 0) {
-    const sourcesDiv = createElement("div", "technet-message-sources");
-
-    // Create sources list
-    const sourcesList = createElement("ul", "technet-sources-list");
-    message.sources.forEach((source) => {
-      const sanitizedSource = sanitizeURL(source);
-      if (sanitizedSource) {
-        const listItem = createElement("li");
-        const link = createElement("a") as HTMLAnchorElement;
-        link.href = sanitizedSource;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        link.textContent = sanitizedSource;
-        listItem.appendChild(link);
-        sourcesList.appendChild(listItem);
-      }
-    });
-
-    if (sourcesList.children.length > 0) {
-      const sourcesTitle = createElement("div", "technet-sources-title");
-      sourcesTitle.textContent = "Sources:";
-      sourcesDiv.appendChild(sourcesTitle);
-      sourcesDiv.appendChild(sourcesList);
-      contentWrapper.appendChild(sourcesDiv);
-    }
-  }
 
   messageDiv.appendChild(avatar);
   messageDiv.appendChild(contentWrapper);
@@ -172,25 +143,24 @@ export function showNotification(widget: ChatWidget, message: string) {
 export async function streamBotMessage(
   widget: ChatWidget,
   userMessage: string
-) {
+): Promise<void> {
   // Show typing indicator
   showTypingIndicator(widget);
 
+  let reader: ReadableStreamDefaultReader<Uint8Array> | null = null;
+
   try {
-    const response = await fetch(
-      `${CONFIG.apiUrl}?message=${encodeURIComponent(userMessage)}`
-    );
+    const response = await postStreamMessage(userMessage);
 
     if (!response.body) {
-      hideTypingIndicator(widget);
-      throw new Error("Streaming not supported");
+      throw new Error("Response body is null");
     }
 
-    const reader = response.body.getReader();
+    reader = response.body.getReader();
     const decoder = new TextDecoder();
 
     // Create empty message bubble for bot
-    let botMessageEl = null;
+    let botMessageEl: HTMLElement | null = null;
 
     let accumulatedText = "";
     let sources: string[] = [];
@@ -200,6 +170,7 @@ export async function streamBotMessage(
     while (!done) {
       const { value, done: streamDone } = await reader.read();
       done = streamDone;
+
       if (value) {
         if (isFirstChunk) {
           botMessageEl = addMessage(widget, "", "bot");
@@ -225,20 +196,11 @@ export async function streamBotMessage(
           accumulatedText += chunk;
         }
 
-        // Update the message content
-        const messageContentEl = botMessageEl!.querySelector(
-          ".technet-message-content"
-        ) as HTMLElement;
-        if (messageContentEl) {
-          messageContentEl.innerHTML = parseMarkdown(accumulatedText);
-
-          // if (hasMarkdown(accumulatedText)) {
-          //   messageContentEl.innerHTML = parseMarkdown(accumulatedText);
-          // } else {
-          //   messageContentEl.textContent = accumulatedText;
-          // }
-          scrollToBottom(widget.messagesContainer!);
-        }
+        updateMessageContent(
+          botMessageEl!,
+          accumulatedText,
+          widget.messagesContainer!
+        );
       }
     }
 
@@ -248,22 +210,78 @@ export async function streamBotMessage(
     }
 
     // Update message history with final content and sources
-    const messageId = botMessageEl!.getAttribute("data-message-id");
-    if (messageId) {
-      const message = widget.messageHistory.find((m) => m.id === messageId);
-      if (message) {
-        message.text = accumulatedText;
-        message.sources = sources as any;
-
-        // Append sources to the message element
-        if (sources.length > 0) {
-          appendSources(botMessageEl!, sources as any);
-        }
-      }
+    if (botMessageEl) {
+      updateMessageHistory(botMessageEl, accumulatedText, sources, widget);
     }
   } catch (error) {
     hideTypingIndicator(widget);
-    throw error;
+
+    // Log error for debugging
+    console.error("Error in streamBotMessage:", error);
+
+    // Re-throw with more context
+    throw new Error(
+      `Failed to stream bot message: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
+  } finally {
+    // Ensure reader is always closed
+    if (reader) {
+      try {
+        await reader.cancel();
+        reader.releaseLock();
+      } catch (cleanupError) {
+        console.warn("Error cleaning up stream reader:", cleanupError);
+      }
+    }
+  }
+}
+
+/**
+ * Updates message content with throttling
+ * @param {HTMLElement} messageElement - The message element to update
+ * @param {string} text - The text content to display
+ */
+function updateMessageContent(
+  messageElement: HTMLElement,
+  text: string,
+  messageContainer: HTMLElement
+): void {
+  const messageContentEl = messageElement.querySelector(
+    ".technet-message-content"
+  ) as HTMLElement;
+
+  if (messageContentEl) {
+    messageContentEl.innerHTML = parseMarkdown(text);
+    scrollToBottom(messageContainer);
+  }
+}
+
+/**
+ * Updates message history with final content and sources
+ * @param {HTMLElement} messageElement - The message element
+ * @param {string} text - The final text content
+ * @param {string[]} sources - Array of sources
+ */
+function updateMessageHistory(
+  messageElement: HTMLElement,
+  text: string,
+  sources: string[],
+  widget: ChatWidget
+): void {
+  const messageId = messageElement.getAttribute("data-message-id");
+  if (!messageId) return;
+
+  const message = widget.messageHistory.find((m) => m.id === messageId);
+  if (!message) return;
+
+  message.text = text;
+  message.sources = sources;
+
+  // Append sources to the message element
+  if (sources.length > 0) {
+    appendSources(messageElement, sources);
   }
 }
 

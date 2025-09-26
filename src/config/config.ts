@@ -25,8 +25,7 @@ export const CONFIG: ChatWidgetConfig = {
     initial:
       "Hello! I'm the TechNet assistant. I can help you with information about immunization programs, guidelines, and resources. How can I assist you today?",
     placeholder: "Type your message here...",
-    error:
-      "Sorry, I'm having trouble connecting right now. Please try again in a moment.",
+    error: "Sorry, I'm having trouble right now. Please try again in a moment.",
     thinking: "Thinking...",
   },
   dimensions: {
