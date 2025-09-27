@@ -34,7 +34,7 @@ export function getStyles() {
       right: 24px;
       width: 60px;
       height: 60px;
-      background: linear-gradient(135deg, ${CONFIG.colors.primary} 0%, #3a7a7a 100%);
+      background: ${CONFIG.colors.secondary};
       border-radius: 50%;
       cursor: pointer;
       box-shadow: 0 4px 20px ${CONFIG.colors.shadow};
@@ -82,6 +82,7 @@ export function getStyles() {
       overflow: hidden;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       animation: slideUp ${CONFIG.animation.duration}ms ${CONFIG.animation.easing};
+      touch-action: none; /* Prevent background scrolling on mobile */
     }
 
     @keyframes slideUp {
@@ -96,7 +97,7 @@ export function getStyles() {
     }
 
     .technet-chatbot-header {
-      background: linear-gradient(135deg, ${CONFIG.colors.primary} 0%, #3a7a7a 100%);
+      background: ${CONFIG.colors.secondary};
       color: white;
       padding: 16px 20px;
       display: flex;
@@ -105,7 +106,7 @@ export function getStyles() {
     }
 
     .technet-chatbot-title {
-      font-size: 16px;
+      font-size: 20px;
       font-weight: 600;
       display: flex;
       align-items: center;
@@ -187,7 +188,7 @@ export function getStyles() {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
+      font-size: 16px;
       font-weight: bold;
       flex-shrink: 0;
     }
@@ -212,7 +213,7 @@ export function getStyles() {
     .technet-message-content {
       padding: 12px 16px;
       border-radius: 18px;
-      font-size: 14px;
+      font-size: 18px;
       line-height: 1.4;
       word-wrap: break-word;
       overflow-wrap: break-word;
@@ -347,7 +348,7 @@ export function getStyles() {
 
     .technet-sources-list {
       list-style: none;
-      font-size: 11px;
+      font-size: 14px;
     }
 
     .technet-sources-list li {
@@ -369,7 +370,7 @@ export function getStyles() {
       align-items: center;
       gap: 4px;
       color: ${CONFIG.colors.textLight};
-      font-size: 12px;
+      font-size: 14px;
     }
 
     .technet-typing-dots {
@@ -427,7 +428,7 @@ export function getStyles() {
       padding: 12px 16px;
       border: 2px solid #e0e0e0;
       border-radius: 20px;
-      font-size: 14px;
+      font-size: 18px;
       font-family: inherit;
       resize: none;
       outline: none;
@@ -437,6 +438,12 @@ export function getStyles() {
       overflow-wrap: break-word;
       white-space: pre-wrap; /* Allow proper line breaks in input */
       box-sizing: border-box;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE and Edge */
+    }
+
+    .technet-input-field::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, and Opera */
     }
 
     .technet-input-field:focus {
@@ -473,32 +480,7 @@ export function getStyles() {
       transform: none;
     }
 
-    .technet-notification {
-      position: fixed;
-      bottom: 80px;
-      right: 100px;
-      background: ${CONFIG.colors.primary};
-      color: white;
-      padding: 8px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      box-shadow: 0 2px 10px ${CONFIG.colors.shadow};
-      animation: notificationSlide 0.3s ease-out;
-      z-index: 10001;
-      max-width: 200px;
-      word-wrap: break-word;
-    }
 
-    @keyframes notificationSlide {
-      from {
-        opacity: 0;
-        transform: translateX(100%);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
 
     /* Mobile Responsiveness */
     @media (max-width: ${CONFIG.dimensions.mobileBreakpoint}px) {
@@ -516,8 +498,7 @@ export function getStyles() {
       }
     }
 
-    /* Accessibility */
-    .technet-chatbot-trigger:focus,
+
     .technet-chatbot-control-btn:focus,
     .technet-send-btn:focus {
       outline: 2px solid ${CONFIG.colors.secondary};

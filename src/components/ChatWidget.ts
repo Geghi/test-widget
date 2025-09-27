@@ -9,7 +9,6 @@ import { bindEvents } from "./ChatWidgetEvents";
 import {
   addMessage,
   hideTypingIndicator,
-  showNotification,
   streamBotMessage,
 } from "./ChatWidgetMessages";
 import { Message } from "../types/types";
@@ -123,10 +122,6 @@ export class ChatWidget extends HTMLElement {
       console.error("Chatbot API Error:", error);
       hideTypingIndicator(this);
       addMessage(this, CONFIG.messages.error, "bot");
-      showNotification(
-        this,
-        "An error occurred while generating the response. Please try again."
-      );
     }
   }
 }
