@@ -34,6 +34,7 @@ export const CONFIG: ChatWidgetConfig = {
     mobileBreakpoint: 768,
   },
   apiUrl: process.env.API_URL as string,
+  conversationHistoryLength: 7, // Get last 3 messages excange plust the new message request.
 };
 
 export default CONFIG;

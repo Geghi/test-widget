@@ -117,7 +117,7 @@ export class ChatWidget extends HTMLElement {
     this.inputField!.style.height = "auto";
 
     try {
-      await streamBotMessage(this, message);
+      await streamBotMessage(this);
     } catch (error) {
       console.error("Chatbot API Error:", error);
       hideTypingIndicator(this);

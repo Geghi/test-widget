@@ -6,7 +6,10 @@ import { CONFIG } from "../config/config";
 import ChatWidget from "./ChatWidget";
 import { Message } from "../types/types";
 import { createSourceListItem } from "../utils/elements";
-import { postStreamMessage } from "../api/chatApi";
+import {
+  postStreamConversationMessage,
+  postStreamMessage,
+} from "../api/chatApi";
 
 /**
  * Adds a message to the chat
@@ -133,19 +136,27 @@ export function hideTypingIndicator(widget: ChatWidget) {
 /**
  * Streams a bot message with typing indicator
  * @param {ChatWidget} widget - The ChatWidget instance
- * @param {string} userMessage - The user's message to send to the API
  */
-export async function streamBotMessage(
-  widget: ChatWidget,
-  userMessage: string
-): Promise<void> {
+export async function streamBotMessage(widget: ChatWidget): Promise<void> {
   // Show typing indicator
   showTypingIndicator(widget);
+
+  // Get the last X messages from history
+  const historyLength = Math.min(
+    CONFIG.conversationHistoryLength,
+    widget.messageHistory.length
+  );
+  const recentMessages = widget.messageHistory.slice(-historyLength);
+
+  // Format conversation as string
+  const conversation = recentMessages
+    .map((msg) => `${msg.sender === "user" ? "User" : "Bot"}: ${msg.text}`)
+    .join("\n");
 
   let reader: ReadableStreamDefaultReader<Uint8Array> | null = null;
 
   try {
-    const response = await postStreamMessage(userMessage);
+    const response = await postStreamConversationMessage(conversation);
 
     if (!response.body) {
       throw new Error("Response body is null");

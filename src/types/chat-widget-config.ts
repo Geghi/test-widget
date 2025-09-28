@@ -34,4 +34,5 @@ export interface ChatWidgetConfig {
   messages: MessagesConfig;
   dimensions: DimensionsConfig;
   apiUrl: string;
+  conversationHistoryLength: number;
 }
