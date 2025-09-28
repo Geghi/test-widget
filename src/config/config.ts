@@ -30,7 +30,7 @@ export const CONFIG: ChatWidgetConfig = {
   },
   dimensions: {
     windowWidth: 480,
-    windowHeight: 600,
+    windowHeight: 550,
     mobileBreakpoint: 768,
   },
   apiUrl: process.env.API_URL as string,

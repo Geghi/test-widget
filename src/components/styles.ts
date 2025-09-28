@@ -213,7 +213,7 @@ export function getStyles() {
     .technet-message-content {
       padding: 12px 16px;
       border-radius: 18px;
-      font-size: 18px;
+      font-size: 16px;
       line-height: 1.4;
       word-wrap: break-word;
       overflow-wrap: break-word;
@@ -244,15 +244,15 @@ export function getStyles() {
     }
 
     .technet-message-content h1 {
-      font-size: 18px;
+      font-size: 20px;
     }
 
     .technet-message-content h2 {
-      font-size: 16px;
+      font-size: 18px;
     }
 
     .technet-message-content h3 {
-      font-size: 15px;
+      font-size: 17px;
     }
 
     .technet-message-content ul,
@@ -280,7 +280,7 @@ export function getStyles() {
       padding: 2px 4px;
       border-radius: 3px;
       font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-      font-size: 13px;
+      font-size: 15px;
     }
 
     .technet-message-content pre {
@@ -290,6 +290,10 @@ export function getStyles() {
       overflow-x: auto;
       margin-bottom: 12px;
     }
+
+    .technet-message > div:not(.technet-message-avatar) {
+        max-width: 100%;
+      }
 
     .technet-message-content pre code {
       background: transparent;
@@ -428,7 +432,7 @@ export function getStyles() {
       padding: 12px 16px;
       border: 2px solid #e0e0e0;
       border-radius: 20px;
-      font-size: 18px;
+      font-size: 16px;
       font-family: inherit;
       resize: none;
       outline: none;
@@ -491,10 +495,61 @@ export function getStyles() {
         right: 12px;
         border-radius: 12px;
       }
-      
+
       .technet-chatbot-trigger {
         bottom: 16px;
         right: 16px;
+        width: 50px;
+        height: 50px;
+      }
+
+      .technet-chatbot-trigger svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .technet-message {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+      }
+
+      .technet-message-content {
+        font-size: 14px;
+      }
+
+      .technet-message-time {
+        font-size: 11px;
+      }
+
+      .technet-input-field {
+        font-size: 14px;
+      }
+
+      .technet-message.user {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        align-self: flex-end;
+      }
+
+      .technet-message-content {
+        max-width: 100%;
+        width: 100%;
+      }
+
+      .technet-message.user .technet-message-content {
+        align-self: stretch;
+      }
+
+      .technet-message.user .technet-message-avatar {
+        align-self: flex-end;
+      }
+
+      .technet-message > div:not(.technet-message-avatar) {
+        max-width: 100%;
+      }
+
+      .technet-message.user .technet-message-time {
+        align-self: flex-end;
       }
     }
 
